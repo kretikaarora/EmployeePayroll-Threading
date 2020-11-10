@@ -6,11 +6,21 @@ using System.Threading.Tasks;
 
 namespace Threading_EmployeePayroll
 {
+    /// <summary>
+    ///  Employee Payroll Operations
+    /// </summary>
     public class EmployeePayrollOperations
     {
+        ///Creating connection with database
         public static string connectionString = @"Data Source=LAPTOP-TAR1C56T\MSSQLSERVER01;Initial Catalog=payroll_services;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         SqlConnection connection = new SqlConnection(connectionString);
         public List<EmployeeDetails> employeePayrollDetailList = new List<EmployeeDetails>();
+
+        /// <summary>
+        /// Adding employee details to list
+        /// UC1
+        /// </summary>
+        /// <param name="employeePayrollDataList"></param>
         public void AddEmployeeToPayroll(List<EmployeeDetails> employeePayrollDataList)
         {
             employeePayrollDataList.ForEach(employeeData => 
@@ -21,24 +31,24 @@ namespace Threading_EmployeePayroll
             });
 
         }
+    
+
+        /// <summary>
+        /// Adding to list 
+        /// called by AddEmployeeToPayroll and AddEmployeeToPayrollUsingThreading
+        /// UC1
+        /// </summary>
+        /// <param name="employee"></param>
         public void AddEmployeePayroll(EmployeeDetails employee)
         {
             employeePayrollDetailList.Add(employee);
         }
 
-        public void AddEmployeeToPayrollUsingThreading(List<EmployeeDetails> employeePayrollDataList)
-        {
-            employeePayrollDataList.ForEach(employeeData =>
-            {
-                Task thread = new Task(() =>
-                {
-                    Console.WriteLine("Employee being added to list" + employeeData.EmployeeName);
-                    AddEmployeePayroll(employeeData);
-                    Console.WriteLine("Employee added to list " + employeeData.EmployeeName);
-                });
-                thread.Start();
-            });
-        }
+        /// <summary>
+        /// Adding Employee To Database
+        /// UC1
+        /// </summary>
+        /// <param name="employeePayrollDataList"></param>
         public void AddEmployeeToDatabase(List<EmployeeDetails> employeePayrollDataList)
         {
             employeePayrollDataList.ForEach(employeeData =>
@@ -49,19 +59,12 @@ namespace Threading_EmployeePayroll
             });
 
         }
-        public void addEmployeeToDataBaseWithThread(List<EmployeeDetails> employeePayrollDataList)
-        {
-            employeePayrollDataList.ForEach(employeeData =>
-            {
-                Task thread = new Task(() =>
-                {
-                    Console.WriteLine("Employee being added" + employeeData.EmployeeName);
-                    this.AddEmployeeDataBase(employeeData);
-                    Console.WriteLine("Employee added" + employeeData.EmployeeName);
-                });
-                thread.Start();
-            });
-        }
+        
+        /// <summary>
+        /// Add EmployeeDataBase Bing called by above two functions to perform operation
+        /// UC1
+        /// </summary>
+        /// <param name="employeeDetails"></param>
         public void AddEmployeeDataBase(EmployeeDetails employeeDetails)
         {
          
@@ -80,8 +83,11 @@ namespace Threading_EmployeePayroll
             command.Parameters.AddWithValue("@Netpay", employeeDetails.NetPay);
             command.Parameters.AddWithValue("@City", employeeDetails.City);
             command.Parameters.AddWithValue("@Country", employeeDetails.Country);
+            ///opening connection
             connection.Open();
+            ///reading data in connected architecture
             command.ExecuteNonQuery();
+            ///closing connectiom
             connection.Close();
         }
     }

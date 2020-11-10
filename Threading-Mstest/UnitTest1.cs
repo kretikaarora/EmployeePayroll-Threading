@@ -6,8 +6,11 @@ using Threading_EmployeePayroll;
 namespace Threading_Mstest
 {
     [TestClass]
-    public class UnitTest1
+    public class UnitTest
     {
+        /// <summary>
+        /// Creating List and Adding Values
+        /// </summary>
         EmployeePayrollOperations employeePayrollOperations = new EmployeePayrollOperations();
         public List<EmployeeDetails> CreateList()
         {
@@ -19,10 +22,17 @@ namespace Threading_Mstest
             employeeDetails.Add(new EmployeeDetails(EmployeeID: 5, EmployeeName: "Gabriyala", PhoneNumber: "8750925666", Address: "Street5", Department: "Marketing", Gender: "F", BasicPay: 230000, Deductions: 10000, TaxablePay: 20000, Tax: 4000, NetPay: 216000, City: "Newyork", Country: "USA"));
             return employeeDetails;
         }
+
+        /// <summary>
+        /// Given List Of Employees When Added To List Should Match The Entries without threading
+        /// UC1
+        /// </summary>
         [TestMethod]
-        public void GivenListOfEmployeesWhenAddedToListShouldMatchTheEntries()
-        {
-            List<EmployeeDetails>employeeDetails = CreateList();            
+        public void GivenListOfEmployeesWhenAddedToListShouldMatchTheEntriesWithoutThreading()
+        { 
+            ///Adding to list and database without threading
+            List<EmployeeDetails>employeeDetails = CreateList();  
+            ///timer
             DateTime startDateTime = DateTime.Now;
             employeePayrollOperations.AddEmployeeToPayroll(employeeDetails);
             DateTime finishDateTime = DateTime.Now;
@@ -33,10 +43,16 @@ namespace Threading_Mstest
             Console.WriteLine("Duration with timer watch", finishDateTime - startDateTime);
         }
 
+        /// <summary>
+        /// Given List Of Employees When Added To List Should Match The Entries with threading
+        /// UC2
+        /// </summary>
         [TestMethod]
         public void GivenListOfEmployeesWhenAddedShouldMatchTheEntriesUsingThreading()
         {
+            ///adding into list and database with threading
             List<EmployeeDetails> employeeDetails = CreateList();
+            ///timer
             DateTime startDateTime = DateTime.Now;
             employeePayrollOperations.AddEmployeeToPayrollUsingThreading(employeeDetails);
             DateTime finishDateTime = DateTime.Now;
@@ -46,6 +62,5 @@ namespace Threading_Mstest
             DateTime finishDateTime1 = DateTime.Now;
             Console.WriteLine("Duration with timer watch", finishDateTime - startDateTime);
         }
-
     }
 }

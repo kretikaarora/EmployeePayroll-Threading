@@ -7,8 +7,7 @@ namespace Threading_EmployeePayroll
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Welcome To Employee Payroll Using Threading");
-            
+            Console.WriteLine("Welcome To Employee Payroll Using Threading");           
         }
     }
 }

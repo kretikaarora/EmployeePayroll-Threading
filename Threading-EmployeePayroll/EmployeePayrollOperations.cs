@@ -32,6 +32,7 @@ namespace Threading_EmployeePayroll
 
         }
 
+
         /// <summary>
         /// add Employee To DataBase With Threading
         /// UC2
@@ -77,6 +78,7 @@ namespace Threading_EmployeePayroll
             });
 
         }
+
 
         /// <summary>
         /// Add Employee To Payroll Using Threading

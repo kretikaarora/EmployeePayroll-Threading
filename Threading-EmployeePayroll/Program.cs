@@ -13,6 +13,7 @@ namespace Threading_EmployeePayroll
     {
         static void Main(string[] args)
         {
+
             Console.WriteLine("Welcome To Employee Payroll Using Threading");
             ///adding into list and database with threading
             EmployeePayrollOperations employeePayrollOperations = new EmployeePayrollOperations();
@@ -29,6 +30,7 @@ namespace Threading_EmployeePayroll
             employeePayrollOperations.addEmployeeToDataBaseWithThreadAndSynchronisation(employeeDetails);
             DateTime finishDateTime = DateTime.Now;
             Console.WriteLine("Duration with timer watch {0}", finishDateTime - startDateTime);
+
         }
     }
 }

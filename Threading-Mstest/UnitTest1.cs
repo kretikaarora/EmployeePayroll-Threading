@@ -62,5 +62,25 @@ namespace Threading_Mstest
             DateTime finishDateTime1 = DateTime.Now;
             Console.WriteLine("Duration with timer watch", finishDateTime - startDateTime);
         }
+
+        /// <summary>
+        /// Given List Of Employees When Added To List Should Match The Entries with threading
+        /// UC3
+        /// </summary>
+        [TestMethod]
+        public void GivenListOfEmployeesWhenAddedShouldMatchTheEntriesUsingThreadingAndSynchronisation()
+        {
+            ///adding into list and database with threading
+            List<EmployeeDetails> employeeDetails = CreateList();
+            ///timer
+            DateTime startDateTime = DateTime.Now;
+            employeePayrollOperations.addEmployeeToDataBaseWithThreadAndSynchronisation(employeeDetails);
+            DateTime finishDateTime = DateTime.Now;
+            Console.WriteLine("Duration with timer watch", finishDateTime - startDateTime);
+            DateTime startDateTime1 = DateTime.Now;
+            employeePayrollOperations.addEmployeeToDataBaseWithThread(employeeDetails);
+            DateTime finishDateTime1 = DateTime.Now;
+            Console.WriteLine("Duration with timer watch", finishDateTime - startDateTime);
+        }
     }
 }

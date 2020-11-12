@@ -10,6 +10,7 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 
 namespace Threading_EmployeePayroll
 {
@@ -18,6 +19,7 @@ namespace Threading_EmployeePayroll
     /// </summary>
     public class EmployeePayrollOperations
     {
+        private readonly NLog nLog = new NLog();
         ///Creating connection with database
         public static string connectionString = @"Data Source=LAPTOP-TAR1C56T\MSSQLSERVER01;Initial Catalog=payroll_services;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         SqlConnection connection = new SqlConnection(connectionString);
@@ -33,9 +35,12 @@ namespace Threading_EmployeePayroll
         {
             employeePayrollDataList.ForEach(employeeData =>
             {
+                ///adding nlog
+                nLog.LogDebug("Employee being added to list" + employeeData.EmployeeName);
                 Console.WriteLine("Employee being added to list" + employeeData.EmployeeName);
                 AddEmployeePayroll(employeeData);
                 Console.WriteLine("Employee added to list " + employeeData.EmployeeName);
+                nLog.LogInfo("Employee added to list " + employeeData.EmployeeName);
             });          
         }
 
@@ -51,10 +56,12 @@ namespace Threading_EmployeePayroll
             {
                 Thread thread = new Thread(() =>
                 {
+                    nLog.LogDebug("Employee being added to list" + employeeData.EmployeeName);
                     Console.WriteLine("Employee being added to list  is " + employeeData.EmployeeName);
                     AddEmployeePayroll(employeeData);
                     Console.WriteLine("Employee added to list  is " + employeeData.EmployeeName);
                     Console.WriteLine("Thread Number is : " + Thread.CurrentThread.ManagedThreadId);
+                    nLog.LogInfo("Employee added to list " + employeeData.EmployeeName);
                 });
                 thread.Start();
                 thread.Join();
@@ -73,11 +80,13 @@ namespace Threading_EmployeePayroll
                 Task thread = new Task(() =>
                 {
                     mut.WaitOne();
+                    nLog.LogDebug("Employee being added to list" + employeeData.EmployeeName);
                     Console.WriteLine("Employee being added to list  is " + employeeData.EmployeeName);
                     AddEmployeePayroll(employeeData);
                     Console.WriteLine("Employee added to list  is " + employeeData.EmployeeName);
                     Console.WriteLine("Thread Number is : " + Thread.CurrentThread.ManagedThreadId);
                     mut.ReleaseMutex();
+                    nLog.LogInfo("Employee added to list " + employeeData.EmployeeName);
                 });
                 thread.Start();
                 thread.Wait();
@@ -93,9 +102,11 @@ namespace Threading_EmployeePayroll
         {
             employeePayrollDataList.ForEach(employeeData =>
             {
+                nLog.LogDebug("Employee being added to Database" + employeeData.EmployeeName);
                 Console.WriteLine("Employee being added to database" + employeeData.EmployeeName);
                 AddEmployeeDataBase(employeeData);                
                 Console.WriteLine("Employee added to database" + employeeData.EmployeeName);
+                nLog.LogInfo("Employee added to Database " + employeeData.EmployeeName);
             });
 
         }
@@ -112,10 +123,13 @@ namespace Threading_EmployeePayroll
             {
                 Task thread = new Task(() =>
                 {
+                    nLog.LogDebug("Employee being added to Database" + employeeData.EmployeeName);
                     Console.WriteLine("Employee being added" + employeeData.EmployeeName);
-                    this.AddEmployeeDataBase(employeeData);                  
+                    this.AddEmployeeDataBase(employeeData);                    
                     Console.WriteLine("Employee added" + employeeData.EmployeeName);
                     Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+                    nLog.LogInfo("Employee added to Database " + employeeData.EmployeeName);
+                    
                 });
                 thread.Start();
                 thread.Wait();
@@ -136,10 +150,12 @@ namespace Threading_EmployeePayroll
                     ///mutex basically blocks other threads to execute 
                     ///it does give signal when current thread is complete
                     mut.WaitOne();
+                    nLog.LogDebug("Employee being added to Database" + employeeData.EmployeeName);
                     Console.WriteLine("Employee being added" + employeeData.EmployeeName);
                     this.AddEmployeeDataBase(employeeData);
                     Console.WriteLine("Employee added" + employeeData.EmployeeName);
                     Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+                    nLog.LogInfo("Employee added to Database " + employeeData.EmployeeName);
                     ///releases the current thread , for execution of new thread
                     mut.ReleaseMutex();
                 });
